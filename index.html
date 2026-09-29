@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistem de gestiune a mentenantei auto</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="app-header">
+        <h1>Sistem de gestiune a mentenantei auto</h1>
+        <p>Evidența operațiunilor de mentenanță ale autovehiculului.</p>
+        <p class="app-count">3 operațiuni, dintre care 2 în așteptare</p>
+    </header>
+
+    <main class="container">
+
+        <section class="panel">
+            <h2>Adaugă operațiune</h2>
+
+            <form class="item-form">
+
+                <label>
+                    Operațiune
+                    <input
+                        type="text"
+                        name="operation"
+                        placeholder="Ex: Schimb ulei motor"
+                    >
+                </label>
+
+                <label>
+                    Tip
+                    <select name="type">
+                        <option value="maintenance">Mentenanță</option>
+                        <option value="repair">Reparație</option>
+                        <option value="inspection">Inspecție</option>
+                    </select>
+                </label>
+
+                <button type="submit">Adaugă</button>
+
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Operațiuni</h2>
+
+            <!-- Când lista este goală:
+            <p class="empty">Nu există nicio operațiune.</p>
+            -->
+
+            <ul class="item-list">
+
+                <li class="item-card done">
+                    <div>
+                        <h3>Schimb ulei motor</h3>
+                        <span class="badge badge-maintenance">Mentenanță</span>
+                    </div>
+
+                    <span class="status">Efectuat</span>
+                </li>
+
+                <li class="item-card">
+                    <div>
+                        <h3>Schimb plăcuțe frână față</h3>
+                        <span class="badge badge-repair">Reparație</span>
+                    </div>
+
+                    <span class="status">În așteptare</span>
+                </li>
+
+                <li class="item-card">
+                    <div>
+                        <h3>Verificare presiune anvelope</h3>
+                        <span class="badge badge-inspection">Inspecție</span>
+                    </div>
+
+                    <span class="status">În așteptare</span>
+                </li>
+
+            </ul>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        Proiect Tehnologii Web
+    </footer>
+
+</body>
+
+</html>
