@@ -21,15 +21,21 @@ Sample data used across all stages:
 
 ## How to run
 
-Open `index.html` in a browser. No build step, no server.
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-Open the browser console with `F12` or `Ctrl + Shift + J` to view the JavaScript test results for Stage 2.
+Then open the address printed in the terminal, usually:
+
+`http://localhost:5173/`
 
 ## AI usage
 
 | Tool | Used for |
 |---|---|
-| ChatGPT | Project theme definition, README structure, Stage 1 guidance and Stage 2 JavaScript guidance |
+| ChatGPT | Project theme definition, README structure, Stage 1 guidance, Stage 2 JavaScript guidance and Stage 3 Vite/React setup |
 
 Details per stage: see the `ai-log/` folder.
 
@@ -60,11 +66,39 @@ The allowed operation types are:
 - `repair`
 - `inspection`
 
+## Stage 3: Vite and React project
+
+The app now lives in `frontend/`, built with Vite and React.
+
+The files from the previous stages are preserved in the `mockup/` folder.
+
+The data from Stage 2 was moved into the main React component in `App.jsx`.
+
+The application displays:
+
+- the application name;
+- the total number of maintenance operations;
+- the number of pending operations calculated from the data;
+- the maintenance data temporarily displayed as raw JSON.
+
+The styles from Stage 1 were reused in `frontend/src/App.css`.
+
+The maintenance list is still displayed as raw JSON.
+The visual components for the list will be implemented in Stage 4.
+
+The project was tested with:
+
+```bash
+npm run dev
+npm run build
+```
+
 ## Status
 
 - [x] Stage 1: static mockup
 - [x] Stage 2: data logic in JavaScript
-- [ ] Stage 3: Vite and React project
+- [x] Stage 3: Vite and React project
+- [ ] Stage 4
 
 ## Stage 1 checklist
 
@@ -87,6 +121,6 @@ The allowed operation types are:
 | S2-R2 | 3+ items with id, name, state and fixed tag | [mentenanta.js](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/mentenanta.js#L1-L22) | Read the initial array |
 | S2-R3 | List, count, search, add, toggle and delete functions | [mentenanta.js](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/mentenanta.js#L25-L84) | Check the functions and console output |
 | S2-R4 | Add rejects empty operation name and invalid type | [mentenanta.js](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/mentenanta.js#L49-L60) | Check the validation messages in the console |
-| S2-R5 | Original array remains unchanged after add | [mentenanta.js](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/mentenanta.js#L121-L125) | Check the "Originalul a rămas cu" console line |
+| S2-R5 | Original array remains unchanged after add | [mentenanta.js](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/mentenanta.js#L121-L125) | Check the "Originalul a ramas cu" console line |
 | S2-R6 | README Stage 2 section and AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/README.md#L36-L66), [ai-log/etapa-02.md](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/ai-log/etapa-02.md#L1-L43) | Read the Stage 2 documentation |
 | S2-R7 | Stage 2 commit pushed | [Stage 2 commit](https://github.com/davidionut21/mentenanta-auto/commit/fee7ebf88ccbcd292086fb92a16f949dd8abe243) | Check commit history |
