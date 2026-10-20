@@ -1,3 +1,5 @@
+import OperatiuniList from "./components/OperatiuniList.jsx";
+
 const operatiuni = [
     {
         id: 1,
@@ -20,7 +22,9 @@ const operatiuni = [
 ];
 
 export default function App() {
-    const inAsteptare = operatiuni.filter((o) => !o.completed).length;
+    const inAsteptare = operatiuni.filter(
+        (operatiune) => !operatiune.completed
+    ).length;
 
     return (
         <>
@@ -40,9 +44,7 @@ export default function App() {
                 <section className="panel">
                     <h2>Operațiuni</h2>
 
-                    <pre>
-                        {JSON.stringify(operatiuni, null, 2)}
-                    </pre>
+                    <OperatiuniList operatiuni={operatiuni} />
                 </section>
             </main>
         </>

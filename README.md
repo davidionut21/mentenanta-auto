@@ -93,12 +93,28 @@ npm run dev
 npm run build
 ```
 
+## Stage 4: components
+
+The maintenance list is rendered from the data through two React components:
+
+- `OperatiuniList` receives the complete array and renders one card for each operation.
+- `OperatiuneCard` receives a single maintenance operation through props and displays it.
+
+The list is rendered using `map` and each component uses the operation id as its React `key`.
+
+If the array is empty, the application displays an explicit empty-list message.
+
+The card appearance and status are calculated from the operation data.
+
+## Status
+
 ## Status
 
 - [x] Stage 1: static mockup
 - [x] Stage 2: data logic in JavaScript
 - [x] Stage 3: Vite and React project
-- [ ] Stage 4
+- [x] Stage 4: components rendered from data
+- [ ] Stage 5: local state and events
 
 ## Stage 1 checklist
 
