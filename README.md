@@ -152,3 +152,15 @@ The card appearance and status are calculated from the operation data.
 | S3-R5 | node_modules ignored, build passes | [frontend/.gitignore](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/frontend/.gitignore#L10-L12) | Run `npm run build` and verify that `node_modules` and `dist` are not committed |
 | S3-R6 | README Stage 3 section and AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/README.md#L69-L101), [ai-log/etapa-03.md](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/ai-log/etapa-03.md#L1-L63) | Read the Stage 3 documentation |
 | S3-R7 | Stage 3 commit pushed | [Stage 3 commit](https://github.com/davidionut21/mentenanta-auto/commit/86e71a2ab331334dd9193a0c1b78213229e7948d) | Check commit history |
+
+## Stage 4 checklist
+
+| ID | Requirement | Where | How to check |
+|---|---|---|---|
+| S4-R1 | 2+ components in src/components/ | [frontend/src/components](https://github.com/davidionut21/mentenanta-auto/tree/df423f3/frontend/src/components) | Open the folder |
+| S4-R2 | Card receives data through props | [OperatiuneCard.jsx](https://github.com/davidionut21/mentenanta-auto/blob/df423f3/frontend/src/components/OperatiuneCard.jsx#L7-L23) | Read the component |
+| S4-R3 | map + key={id}, no console warnings | [OperatiuniList.jsx](https://github.com/davidionut21/mentenanta-auto/blob/df423f3/frontend/src/components/OperatiuniList.jsx#L12-L20) | Open F12 Console and verify there are no React warnings |
+| S4-R4 | Message for empty list | [OperatiuniList.jsx](https://github.com/davidionut21/mentenanta-auto/blob/df423f3/frontend/src/components/OperatiuniList.jsx#L3-L10) | Temporarily set the array to `[]` |
+| S4-R5 | State changes the card look | [OperatiuneCard.jsx](https://github.com/davidionut21/mentenanta-auto/blob/df423f3/frontend/src/components/OperatiuneCard.jsx#L9-L19) | Change a `completed` value and save |
+| S4-R6 | README Stage 4 section + AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/df423f3/README.md#L96-L117), [ai-log/etapa-04.md](https://github.com/davidionut21/mentenanta-auto/blob/df423f3/ai-log/etapa-04.md#L1-L61) | Read the Stage 4 documentation |
+| S4-R7 | Stage 4 commit pushed | [Stage 4 commit](https://github.com/davidionut21/mentenanta-auto/commit/df423f3) | Check commit history |
