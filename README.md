@@ -124,3 +124,15 @@ npm run build
 | S2-R5 | Original array remains unchanged after add | [mentenanta.js](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/mentenanta.js#L121-L125) | Check the "Originalul a ramas cu" console line |
 | S2-R6 | README Stage 2 section and AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/README.md#L36-L66), [ai-log/etapa-02.md](https://github.com/davidionut21/mentenanta-auto/blob/fee7ebf88ccbcd292086fb92a16f949dd8abe243/ai-log/etapa-02.md#L1-L43) | Read the Stage 2 documentation |
 | S2-R7 | Stage 2 commit pushed | [Stage 2 commit](https://github.com/davidionut21/mentenanta-auto/commit/fee7ebf88ccbcd292086fb92a16f949dd8abe243) | Check commit history |
+
+## Stage 3 checklist
+
+| ID | Requirement | Where | How to check |
+|---|---|---|---|
+| S3-R1 | npm run dev starts without errors | [frontend/package.json](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/frontend/package.json#L6-L11) | Run `cd frontend`, `npm install`, `npm run dev` |
+| S3-R2 | App name and counter computed from data | [frontend/src/App.jsx](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/frontend/src/App.jsx#L22-L37) | Edit the data and save; the counter updates automatically |
+| S3-R3 | Data from README, not from the example | [frontend/src/App.jsx](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/frontend/src/App.jsx#L1-L20) | Compare the three operations with the README sample data |
+| S3-R4 | Stage 1 styles reused | [frontend/src/App.css](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/frontend/src/App.css#L1-L210) | Open the React application and check the reused design |
+| S3-R5 | node_modules ignored, build passes | [frontend/.gitignore](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/frontend/.gitignore#L10-L12) | Run `npm run build` and verify that `node_modules` and `dist` are not committed |
+| S3-R6 | README Stage 3 section and AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/README.md#L69-L101), [ai-log/etapa-03.md](https://github.com/davidionut21/mentenanta-auto/blob/86e71a2ab331334dd9193a0c1b78213229e7948d/ai-log/etapa-03.md#L1-L63) | Read the Stage 3 documentation |
+| S3-R7 | Stage 3 commit pushed | [Stage 3 commit](https://github.com/davidionut21/mentenanta-auto/commit/86e71a2ab331334dd9193a0c1b78213229e7948d) | Check commit history |
