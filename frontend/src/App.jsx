@@ -1,6 +1,7 @@
+import { useState } from "react";
 import OperatiuniList from "./components/OperatiuniList.jsx";
 
-const operatiuni = [
+const OPERATIUNI_INITIALE = [
     {
         id: 1,
         operation: "Schimb ulei motor",
@@ -21,7 +22,43 @@ const operatiuni = [
     }
 ];
 
+function temaInitiala() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+}
+
 export default function App() {
+    const [operatiuni, setOperatiuni] = useState(OPERATIUNI_INITIALE);
+    const [tema, setTema] = useState(temaInitiala);
+
+    function handleToggle(id) {
+        setOperatiuni((prev) =>
+            prev.map((operatiune) =>
+                operatiune.id === id
+                    ? {
+                          ...operatiune,
+                          completed: !operatiune.completed
+                      }
+                    : operatiune
+            )
+        );
+    }
+
+    function handleDelete(id) {
+        setOperatiuni((prev) =>
+            prev.filter((operatiune) => operatiune.id !== id)
+        );
+    }
+
+    function handleTema() {
+        const temaNoua = tema === "dark" ? "light" : "dark";
+
+        setTema(temaNoua);
+
+        document.documentElement.dataset.theme = temaNoua;
+    }
+
     const total = operatiuni.length;
 
     const inAsteptare = operatiuni.filter(
@@ -44,14 +81,25 @@ export default function App() {
         (operatiune) => operatiune.type === "inspection"
     ).length;
 
-    const progres = total === 0
-        ? 0
-        : Math.round((finalizate / total) * 100);
+    const progres =
+        total === 0
+            ? 0
+            : Math.round((finalizate / total) * 100);
 
     return (
         <div className="app-shell">
             <header className="hero">
                 <div className="hero-inner">
+                    <button
+                        className="theme-toggle"
+                        onClick={handleTema}
+                        aria-pressed={tema === "dark"}
+                    >
+                        {tema === "dark"
+                            ? "Mod luminos"
+                            : "Mod întunecat"}
+                    </button>
+
                     <div className="brand">
                         <div className="brand-mark">
                             AM
@@ -149,7 +197,11 @@ export default function App() {
                             </span>
                         </div>
 
-                        <OperatiuniList operatiuni={operatiuni} />
+                        <OperatiuniList
+                            operatiuni={operatiuni}
+                            onToggle={handleToggle}
+                            onDelete={handleDelete}
+                        />
                     </section>
 
                     <aside className="overview-panel">
@@ -179,7 +231,9 @@ export default function App() {
                             <div className="progress-track">
                                 <div
                                     className="progress-fill"
-                                    style={{ width: `${progres}%` }}
+                                    style={{
+                                        width: `${progres}%`
+                                    }}
                                 ></div>
                             </div>
 

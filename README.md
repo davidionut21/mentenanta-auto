@@ -35,7 +35,7 @@ Then open the address printed in the terminal, usually:
 
 | Tool | Used for |
 |---|---|
-| ChatGPT | Project theme definition, README structure, Stage 1 guidance, Stage 2 JavaScript guidance and Stage 3 Vite/React setup |
+| ChatGPT | Project theme definition, README structure, implementation guidance through Stage 5 and automotive dashboard styling |
 
 Details per stage: see the `ai-log/` folder.
 
@@ -106,7 +106,31 @@ If the array is empty, the application displays an explicit empty-list message.
 
 The card appearance and status are calculated from the operation data.
 
-## Status
+## Stage 5: local state and events
+
+The maintenance operation list is stored in React state using `useState`.
+
+Each operation can be marked as completed or pending directly from the interface using a controlled checkbox. Operations can also be deleted from the page.
+
+The state is updated immutably:
+
+- `map` is used to toggle the `completed` value;
+- `filter` is used to delete an operation;
+- the original state array is never modified directly.
+
+The dashboard values are derived from the current operation list:
+
+- total operations;
+- pending operations;
+- completed operations;
+- maintenance progress;
+- number of Maintenance, Repair and Inspection operations.
+
+These values update automatically whenever the list changes and are not stored in separate state variables.
+
+The application also includes a light/dark theme button. The current theme is stored in React state and the selected theme is applied through the `data-theme` attribute on the HTML element.
+
+The operation list and selected theme return to their initial values after refreshing the page because persistence is introduced in later stages.
 
 ## Status
 
@@ -114,7 +138,8 @@ The card appearance and status are calculated from the operation data.
 - [x] Stage 2: data logic in JavaScript
 - [x] Stage 3: Vite and React project
 - [x] Stage 4: components rendered from data
-- [ ] Stage 5: local state and events
+- [x] Stage 5: local state and events
+- [ ] Stage 6: loading data from a mock API
 
 ## Stage 1 checklist
 

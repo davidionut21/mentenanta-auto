@@ -1,6 +1,10 @@
 import OperatiuneCard from "./OperatiuneCard.jsx";
 
-export default function OperatiuniList({ operatiuni }) {
+export default function OperatiuniList({
+    operatiuni,
+    onToggle,
+    onDelete
+}) {
     if (operatiuni.length === 0) {
         return (
             <div className="empty-state">
@@ -25,6 +29,8 @@ export default function OperatiuniList({ operatiuni }) {
                 <OperatiuneCard
                     key={operatiune.id}
                     operatiune={operatiune}
+                    onToggle={onToggle}
+                    onDelete={onDelete}
                 />
             ))}
         </ul>

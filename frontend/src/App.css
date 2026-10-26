@@ -82,7 +82,6 @@ body {
     min-height: 100vh;
 }
 
-
 /* HERO */
 
 .hero {
@@ -275,7 +274,6 @@ body {
         0 0 9px rgba(43, 209, 126, 0.8);
 }
 
-
 /* DASHBOARD */
 
 .dashboard {
@@ -289,7 +287,6 @@ body {
 
     padding: 0 26px 50px;
 }
-
 
 /* STAT CARDS */
 
@@ -406,7 +403,6 @@ body {
     line-height: 1;
 }
 
-
 /* MAIN GRID */
 
 .dashboard-grid {
@@ -442,7 +438,6 @@ body {
 
     padding: 25px;
 }
-
 
 /* SECTION HEADERS */
 
@@ -493,7 +488,6 @@ body {
 
     white-space: nowrap;
 }
-
 
 /* OPERATION LIST */
 
@@ -601,7 +595,6 @@ body {
     font-weight: 800;
 }
 
-
 /* TYPE BADGES */
 
 .type-badge {
@@ -647,7 +640,6 @@ body {
     color: #187949;
     background: var(--green-soft);
 }
-
 
 /* STATUS */
 
@@ -702,7 +694,6 @@ body {
         0 0 7px rgba(36, 144, 91, 0.5);
 }
 
-
 /* COMPLETED */
 
 .operation-card.done {
@@ -727,7 +718,6 @@ body {
 
     text-decoration: line-through;
 }
-
 
 /* PROGRESS */
 
@@ -806,7 +796,6 @@ body {
     font-size: 0.67rem;
 }
 
-
 /* OVERVIEW LIST */
 
 .overview-list {
@@ -871,7 +860,6 @@ body {
 .type-inspection {
     background: var(--green);
 }
-
 
 /* VEHICLE STATUS */
 
@@ -940,7 +928,6 @@ body {
     font-size: 0.7rem;
 }
 
-
 /* EMPTY STATE */
 
 .empty-state {
@@ -987,7 +974,6 @@ body {
     font-size: 0.72rem;
 }
 
-
 /* FOOTER */
 
 .app-footer {
@@ -1014,7 +1000,6 @@ body {
     background: #a3a6a9;
 }
 
-
 /* ACCESSIBILITY */
 
 :focus-visible {
@@ -1024,6 +1009,109 @@ body {
     outline-offset: 3px;
 }
 
+/* ETAPA 5 - INTERACTIUNI */
+
+.operation-main-toggle {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    cursor: pointer;
+}
+
+.operation-main-toggle input[type="checkbox"] {
+    width: 19px;
+    height: 19px;
+
+    flex: 0 0 19px;
+
+    accent-color: var(--accent);
+
+    cursor: pointer;
+}
+
+.operation-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.delete-button {
+    padding: 7px 11px;
+
+    border: 1px solid var(--red);
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: var(--red);
+
+    font: inherit;
+    font-size: 0.69rem;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.delete-button:hover {
+    background: var(--red);
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+.delete-button:active {
+    transform: translateY(0);
+}
+
+.theme-toggle {
+    position: absolute;
+
+    top: 0;
+    right: 28px;
+
+    z-index: 5;
+
+    padding: 8px 13px;
+
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 7px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    color: #ffffff;
+
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    backdrop-filter: blur(8px);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 122, 0, 0.18);
+
+    border-color: rgba(255, 145, 42, 0.65);
+
+    transform: translateY(-1px);
+}
 
 /* TABLET */
 
@@ -1036,7 +1124,6 @@ body {
         position: static;
     }
 }
-
 
 /* MOBILE */
 
@@ -1114,13 +1201,30 @@ body {
     .app-footer {
         flex-wrap: wrap;
     }
+
+    .theme-toggle {
+        position: static;
+
+        display: block;
+
+        margin: 0 0 25px auto;
+    }
+
+    .operation-main-toggle {
+        width: 100%;
+    }
+
+    .operation-actions {
+        width: 100%;
+
+        justify-content: space-between;
+    }
 }
 
-
-/* DARK MODE */
+/* DARK MODE - TEMA SISTEMULUI */
 
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
         --page-bg: #090a0b;
         --page-bg-2: #111315;
 
@@ -1145,7 +1249,7 @@ body {
             0 18px 55px rgba(0, 0, 0, 0.35);
     }
 
-    body {
+    :root:not([data-theme="light"]) body {
         background:
             repeating-linear-gradient(
                 135deg,
@@ -1161,28 +1265,28 @@ body {
             );
     }
 
-    .stat-card,
-    .operations-panel,
-    .overview-panel {
+    :root:not([data-theme="light"]) .stat-card,
+    :root:not([data-theme="light"]) .operations-panel,
+    :root:not([data-theme="light"]) .overview-panel {
         background: #17191b;
 
         border-color: #303336;
     }
 
-    .section-heading h2,
-    .stat-value,
-    .operation-main h3,
-    .overview-row strong {
+    :root:not([data-theme="light"]) .section-heading h2,
+    :root:not([data-theme="light"]) .stat-value,
+    :root:not([data-theme="light"]) .operation-main h3,
+    :root:not([data-theme="light"]) .overview-row strong {
         color: #f1f1ef;
     }
 
-    .operation-count {
+    :root:not([data-theme="light"]) .operation-count {
         background: #1d2022;
 
         border-color: #33373a;
     }
 
-    .operation-card {
+    :root:not([data-theme="light"]) .operation-card {
         background:
             linear-gradient(
                 135deg,
@@ -1193,15 +1297,15 @@ body {
         border-color: #303437;
     }
 
-    .operation-card:hover {
+    :root:not([data-theme="light"]) .operation-card:hover {
         border-color: #76502f;
     }
 
-    .operation-card.done {
+    :root:not([data-theme="light"]) .operation-card.done {
         border-color: #29543d;
     }
 
-    .progress-card {
+    :root:not([data-theme="light"]) .progress-card {
         background:
             linear-gradient(
                 145deg,
@@ -1212,27 +1316,145 @@ body {
         border-color: #303336;
     }
 
-    .progress-track {
+    :root:not([data-theme="light"]) .progress-track {
         background: #333639;
     }
 
-    .overview-list {
+    :root:not([data-theme="light"]) .overview-list {
         border-color: #303336;
     }
 
-    .overview-row {
+    :root:not([data-theme="light"]) .overview-row {
         background: #181a1c;
 
         border-color: #303336;
     }
 
-    .empty-state {
+    :root:not([data-theme="light"]) .empty-state {
         background: #1a1c1e;
 
         border-color: #3c4043;
     }
 
-    .operation-card.done h3 {
+    :root:not([data-theme="light"]) .operation-card.done h3 {
         color: #8d969c;
     }
+}
+
+/* DARK MODE ALES DIN BUTON */
+
+:root[data-theme="dark"] {
+    --page-bg: #090a0b;
+    --page-bg-2: #111315;
+
+    --surface: #16181a;
+    --surface-soft: #1c1f21;
+
+    --text: #eeeeec;
+    --text-secondary: #b2b4b5;
+    --muted: #7f8386;
+
+    --border: #303336;
+    --border-dark: #42464a;
+
+    --accent-soft: #3b2615;
+
+    --green-soft: #163024;
+    --red-soft: #351d20;
+    --yellow-soft: #382b17;
+    --blue-soft: #192b39;
+
+    --shadow:
+        0 18px 55px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] body {
+    background:
+        repeating-linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.012) 0,
+            rgba(255, 255, 255, 0.012) 1px,
+            transparent 1px,
+            transparent 14px
+        ),
+        linear-gradient(
+            180deg,
+            #0b0c0d,
+            #121416
+        );
+}
+
+:root[data-theme="dark"] .stat-card,
+:root[data-theme="dark"] .operations-panel,
+:root[data-theme="dark"] .overview-panel {
+    background: #17191b;
+
+    border-color: #303336;
+}
+
+:root[data-theme="dark"] .section-heading h2,
+:root[data-theme="dark"] .stat-value,
+:root[data-theme="dark"] .operation-main h3,
+:root[data-theme="dark"] .overview-row strong {
+    color: #f1f1ef;
+}
+
+:root[data-theme="dark"] .operation-count {
+    background: #1d2022;
+
+    border-color: #33373a;
+}
+
+:root[data-theme="dark"] .operation-card {
+    background:
+        linear-gradient(
+            135deg,
+            #1b1e20,
+            #151719
+        );
+
+    border-color: #303437;
+}
+
+:root[data-theme="dark"] .operation-card:hover {
+    border-color: #76502f;
+}
+
+:root[data-theme="dark"] .operation-card.done {
+    border-color: #29543d;
+}
+
+:root[data-theme="dark"] .progress-card {
+    background:
+        linear-gradient(
+            145deg,
+            #1b1d1f,
+            #151719
+        );
+
+    border-color: #303336;
+}
+
+:root[data-theme="dark"] .progress-track {
+    background: #333639;
+}
+
+:root[data-theme="dark"] .overview-list {
+    border-color: #303336;
+}
+
+:root[data-theme="dark"] .overview-row {
+    background: #181a1c;
+
+    border-color: #303336;
+}
+
+:root[data-theme="dark"] .empty-state {
+    background: #1a1c1e;
+
+    border-color: #3c4043;
+}
+
+:root[data-theme="dark"] .operation-card.done h3 {
+    color: #8d969c;
 }
