@@ -1,26 +1,8 @@
-import { useState } from "react";
-import OperatiuniList from "./components/OperatiuniList.jsx";
 
-const OPERATIUNI_INITIALE = [
-    {
-        id: 1,
-        operation: "Schimb ulei motor",
-        completed: true,
-        type: "maintenance"
-    },
-    {
-        id: 2,
-        operation: "Schimb plăcuțe frână față",
-        completed: false,
-        type: "repair"
-    },
-    {
-        id: 3,
-        operation: "Verificare presiune anvelope",
-        completed: false,
-        type: "inspection"
-    }
-];
+import { useEffect, useState } from "react";
+import OperatiuniList from "./components/OperatiuniList.jsx";
+import { fetchOperatiuni } from "./api.js";
+import "./api-states.css";
 
 function temaInitiala() {
     return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -29,8 +11,31 @@ function temaInitiala() {
 }
 
 export default function App() {
-    const [operatiuni, setOperatiuni] = useState(OPERATIUNI_INITIALE);
+    const [operatiuni, setOperatiuni] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [tema, setTema] = useState(temaInitiala);
+
+    useEffect(() => {
+        let ignore = false;
+
+        async function load() {
+            try {
+                const data = await fetchOperatiuni();
+                if (!ignore) setOperatiuni(data);
+            } catch (err) {
+                if (!ignore) setError(err.message);
+            } finally {
+                if (!ignore) setLoading(false);
+            }
+        }
+
+        load();
+
+        return () => {
+            ignore = true;
+        };
+    }, []);
 
     function handleToggle(id) {
         setOperatiuni((prev) =>
@@ -197,11 +202,27 @@ export default function App() {
                             </span>
                         </div>
 
-                        <OperatiuniList
-                            operatiuni={operatiuni}
-                            onToggle={handleToggle}
-                            onDelete={handleDelete}
-                        />
+                        {loading && (
+                            <p className="info" role="status">
+                                Se încarcă operațiunile...
+                            </p>
+                        )}
+
+                        {error && (
+                            <p className="error" role="alert">
+                                Nu am putut încărca datele: {error}.{" "}
+                                Verifică dacă API-ul este pornit cu{" "}
+                                <code>npm run api</code>.
+                            </p>
+                        )}
+
+                        {!loading && !error && (
+                            <OperatiuniList
+                                operatiuni={operatiuni}
+                                onToggle={handleToggle}
+                                onDelete={handleDelete}
+                            />
+                        )}
                     </section>
 
                     <aside className="overview-panel">

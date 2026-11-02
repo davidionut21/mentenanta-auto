@@ -1,3 +1,4 @@
+
 # Sistem de gestiune a mentenantei auto
 
 The application manages the maintenance history of a vehicle.
@@ -18,24 +19,47 @@ Sample data used across all stages:
 1. Engine oil change, completed, Maintenance
 2. Front brake pad replacement, pending, Repair
 3. Tire pressure check, pending, Inspection
+4. Air filter change, pending, Maintenance
+5. Electrical system check, completed, Inspection
 
 ## How to run
+
+From Stage 6 onward the frontend and the mock API run in two terminals.
+
+Install dependencies once from the project root:
 
 ```bash
 cd frontend
 npm install
+```
+
+Terminal 1 (from `frontend/`):
+
+```bash
+npm run api
+```
+
+API endpoint: `http://localhost:3001/operatiuni`
+
+Terminal 2 (also from `frontend/`):
+
+```bash
 npm run dev
 ```
 
-Then open the address printed in the terminal, usually:
+Open the Vite address, usually `http://localhost:5173/`.
 
-`http://localhost:5173/`
+To verify the build:
+
+```bash
+npm run build
+```
 
 ## AI usage
 
 | Tool | Used for |
 |---|---|
-| ChatGPT | Project theme definition, README structure, implementation guidance through Stage 5 and automotive dashboard styling |
+| ChatGPT | Project theme definition, README structure, implementation guidance through Stage 6, the API integration and automotive dashboard styling |
 
 Details per stage: see the `ai-log/` folder.
 
@@ -132,6 +156,36 @@ The application also includes a light/dark theme button. The current theme is st
 
 The operation list and selected theme return to their initial values after refreshing the page because persistence is introduced in later stages.
 
+## Stage 6: data from a mock API
+
+The maintenance operations are stored in `frontend/db.json`, under the resource name `operatiuni`.
+The mock REST API is provided by `json-server@0.17.4` at `http://localhost:3001/operatiuni`.
+The first three records from Stage 5 are preserved and two new maintenance examples were added.
+
+`frontend/src/api.js` is the only module that makes an HTTP request. Its `fetchOperatiuni`
+function uses `fetch`, `async` / `await`, checks `res.ok`, and reads the API base URL from
+`VITE_API_URL`, defaulting to `http://localhost:3001`. The variable is documented in
+`frontend/.env.example`.
+
+When `App` mounts, `useEffect` fetches the operations. The initial list is empty and
+three UI states are handled: loading, success, and a descriptive error if the API is unavailable.
+The effect is cleaned up with `ignore`, so an outdated response does not update an unmounted component.
+
+To test the failure case, stop `npm run api` and refresh the page. To test a visible
+loading state, stop the normal API and temporarily run in `frontend/`:
+
+```bash
+npx json-server --watch db.json --port 3001 --delay 4000
+```
+
+The existing dashboard and `OperatiuneCard` / `OperatiuniList` components remain unchanged.
+A small `api-states.css` stylesheet adds only loading/error styles, without replacing the
+custom `App.css` from Stage 5.
+
+**Stage 6 limitation:** checking or deleting an operation still changes only React state.
+Refreshing the browser restores the values from `db.json`; saving changes on the server
+is reserved for Stage 7.
+
 ## Status
 
 - [x] Stage 1: static mockup
@@ -139,7 +193,8 @@ The operation list and selected theme return to their initial values after refre
 - [x] Stage 3: Vite and React project
 - [x] Stage 4: components rendered from data
 - [x] Stage 5: local state and events
-- [ ] Stage 6: loading data from a mock API
+- [x] Stage 6: loading data from a mock API
+- [ ] Stage 7: form and validation
 
 ## Stage 1 checklist
 

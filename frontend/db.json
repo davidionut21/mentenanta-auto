@@ -1,0 +1,35 @@
+
+{
+  "operatiuni": [
+    {
+      "id": 1,
+      "operation": "Schimb ulei motor",
+      "completed": true,
+      "type": "maintenance"
+    },
+    {
+      "id": 2,
+      "operation": "Schimb plăcuțe frână față",
+      "completed": false,
+      "type": "repair"
+    },
+    {
+      "id": 3,
+      "operation": "Verificare presiune anvelope",
+      "completed": false,
+      "type": "inspection"
+    },
+    {
+      "id": 4,
+      "operation": "Schimb filtru de aer",
+      "completed": false,
+      "type": "maintenance"
+    },
+    {
+      "id": 5,
+      "operation": "Verificare sistem electric",
+      "completed": true,
+      "type": "inspection"
+    }
+  ]
+}

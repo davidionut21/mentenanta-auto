@@ -1,0 +1,26 @@
+
+/* Etapa 6: mesaje pentru incarcarea datelor din API. */
+.info,
+.error {
+    margin: 16px 0 0;
+    padding: 14px 16px;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+.info {
+    color: var(--text-secondary);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+}
+
+.error {
+    color: var(--red);
+    background: var(--red-soft);
+    border: 1px solid var(--red);
+}
+
+.error code {
+    margin-left: 4px;
+    font-weight: 700;
+}
