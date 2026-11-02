@@ -257,3 +257,15 @@ is reserved for Stage 7.
 | S5-R6 | Light/dark toggle uses state and `data-theme` on HTML | [App.jsx](https://github.com/davidionut21/mentenanta-auto/blob/0792d8ec22e74a3553080f0af6d67e580236ee4d/frontend/src/App.jsx#L25-L60), [Theme button](https://github.com/davidionut21/mentenanta-auto/blob/0792d8ec22e74a3553080f0af6d67e580236ee4d/frontend/src/App.jsx#L93-L101), [App.css](https://github.com/davidionut21/mentenanta-auto/blob/0792d8ec22e74a3553080f0af6d67e580236ee4d/frontend/src/App.css#L1245-L1479) | Switch between light and dark mode in both directions |
 | S5-R7 | No console warnings; README and AI log updated | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/0792d8ec22e74a3553080f0af6d67e580236ee4d/README.md#L109-L142), [ai-log/etapa-05.md](https://github.com/davidionut21/mentenanta-auto/blob/0792d8ec22e74a3553080f0af6d67e580236ee4d/ai-log/etapa-05.md#L1-L69) | Open the browser console and read the Stage 5 documentation |
 | S5-R8 | Stage 5 commit pushed | [Stage 5 commit](https://github.com/davidionut21/mentenanta-auto/commit/0792d8ec22e74a3553080f0af6d67e580236ee4d) | Check commit history |
+
+## Stage 6 checklist
+
+| ID | Requirement | Where | How to check |
+|---|---|---|---|
+| S6-R1 | npm run api starts and the route returns JSON | [package.json](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/package.json#L12), [db.json](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/db.json#L2-L35) | Run `npm run api` and open `http://localhost:3001/operatiuni` |
+| S6-R2 | Data is no longer hardcoded in React | [App.jsx](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/src/App.jsx#L13-L16), [db.json](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/db.json#L2-L35) | Check `useState([])` and the five records in db.json |
+| S6-R3 | Loading message appears while waiting | [App.jsx](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/src/App.jsx#L204-L209) | Start the API with `--delay 4000` and refresh |
+| S6-R4 | Explicit error message when API is down | [App.jsx](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/src/App.jsx#L211-L217) | Stop `npm run api` and refresh the page |
+| S6-R5 | Fetch only in api.js, API URL from environment | [api.js](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/src/api.js#L3-L19), [.env.example](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/.env.example#L2-L3) | Check `fetch`, `res.ok`, `VITE_API_URL` and the useEffect cleanup |
+| S6-R6 | README Stage 6 section and AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/README.md#L159), [ai-log/etapa-06.md](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/ai-log/etapa-06.md) | Read the documentation |
+| S6-R7 | Stage 6 commit pushed | [Stage 6 commit](https://github.com/davidionut21/mentenanta-auto/commit/30a3c2359aae9daf47caab057fdae18ad987e7a0) | Check GitHub commit history |
