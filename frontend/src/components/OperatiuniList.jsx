@@ -1,5 +1,6 @@
 
 import OperatiuneCard from "./OperatiuneCard.jsx";
+import styles from "./OperatiuniList.module.css";
 
 export default function OperatiuniList({
     operatiuni,
@@ -8,8 +9,8 @@ export default function OperatiuniList({
 }) {
     if (operatiuni.length === 0) {
         return (
-            <div className="empty-state" data-testid="empty">
-                <div className="empty-symbol">0</div>
+            <div className={styles.empty} data-testid="empty">
+                <div className={styles.symbol}>0</div>
 
                 <h3>Nu există operațiuni</h3>
 
@@ -21,7 +22,7 @@ export default function OperatiuniList({
     }
 
     return (
-        <ul className="operation-list">
+        <ul className={styles.list}>
             {operatiuni.map((operatiune) => (
                 <OperatiuneCard
                     key={operatiune.id}

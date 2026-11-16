@@ -11,7 +11,8 @@ It allows users to keep track of completed and pending maintenance operations.
 | operation | text | required, max 100 chars |
 | completed | boolean | completed or pending, default false |
 | type | fixed values | Maintenance, Repair, Inspection |
-| category | relation | Engine, Brakes, Tires, Electrical |
+| description | text | optional details displayed on the operation detail page |
+| category | relation | Engine, Brakes, Tires, Electrical (planned) |
 | user | relation | the owner of the item (from week 11) |
 
 Sample data used across all stages:
@@ -24,9 +25,9 @@ Sample data used across all stages:
 
 ## How to run
 
-From Stage 6 onward the frontend and the mock API run in two terminals.
+The frontend and the mock API run in two terminals.
 
-Install dependencies once from the project root:
+Install dependencies once:
 
 ```bash
 cd frontend
@@ -49,6 +50,17 @@ npm run dev
 
 Open the Vite address, usually `http://localhost:5173/`.
 
+### Available pages
+
+| URL | Page |
+|---|---|
+| `/` | Maintenance dashboard and operations list |
+| `/operatiuni/:id` | Detail page for a single operation |
+| `/despre` | About the application |
+| Any other URL | Custom 404 page |
+
+Example detail URL: `http://localhost:5173/operatiuni/1`
+
 To verify the project:
 
 ```bash
@@ -60,7 +72,7 @@ npm run build
 
 | Tool | Used for |
 |---|---|
-| ChatGPT | Project theme definition, README structure, implementation guidance through Stage 7, API integration, controlled forms, validation, persistent CRUD operations and automotive dashboard styling |
+| ChatGPT | Project theme definition, README structure, implementation guidance through Stage 8, React components, state management, API integration, form validation, CRUD operations, React Router, CSS Modules and automotive dashboard styling |
 
 Details per stage: see the `ai-log/` folder.
 
@@ -305,6 +317,218 @@ To test Stage 7:
 9. Verify that the entered text is preserved when saving fails.
 10. Run `npm run lint` and `npm run build`.
 
+## Stage 8: routing and detail page
+
+The application now uses React Router to provide multiple pages without reloading the entire HTML document.
+
+The original automotive maintenance dashboard was preserved, while navigation and styling were reorganized into reusable components and pages.
+
+### React Router
+
+The `react-router-dom` package was installed to manage navigation.
+
+`frontend/src/main.jsx` wraps the application in `BrowserRouter`.
+
+`frontend/src/App.jsx` contains the route configuration using `Routes` and `Route`.
+
+The application provides the following routes:
+
+| Route | Component | Description |
+|---|---|---|
+| `/` | `OperatiuniPage` | Dashboard, form, statistics and operations list |
+| `/operatiuni/:id` | `OperatiuneDetaliuPage` | Details of a single maintenance operation |
+| `/despre` | `DesprePage` | Project description |
+| `*` | `NotFoundPage` | Custom 404 page |
+
+The detail route uses `/operatiuni/:id`, where `operatiuni` matches the `resource` field in `tw.json`.
+
+### Shared layout
+
+A reusable `Layout` component was introduced in `frontend/src/components/Layout.jsx`.
+
+The layout contains:
+
+- the automotive application header and logo;
+- navigation links to the operations list and About page;
+- the existing light/dark theme button;
+- the main content area;
+- the application footer.
+
+The component uses `Outlet` to display the active page inside the common layout.
+
+Navigation uses `NavLink`, which automatically marks the currently selected page.
+
+The main navigation link uses the `end` attribute for exact matching.
+
+### Navigation without reloading
+
+React Router's `Link` component is used for navigation from operation cards to their detail pages.
+
+Each operation title opens the corresponding address:
+
+`/operatiuni/:id`
+
+For example, selecting the operation with ID 1 opens:
+
+`http://localhost:5173/operatiuni/1`
+
+Navigation changes the page content without reloading the entire application.
+
+The browser Back and Forward buttons continue to work.
+
+### Operations page
+
+The original logic from `App.jsx` was moved to:
+
+`frontend/src/pages/OperatiuniPage.jsx`
+
+This page contains:
+
+- maintenance statistics;
+- the controlled operation form;
+- the list of operations;
+- loading and error messages;
+- the overview panel;
+- the maintenance progress indicator.
+
+All persistent CRUD operations introduced in Stage 7 remain available.
+
+The application continues to use the mock REST API from `json-server`.
+
+### Operation detail page
+
+The new `OperatiuneDetaliuPage` reads the operation ID from the URL using `useParams()`.
+
+The `fetchOperatiune(id)` function in `api.js` requests exactly one operation from the server.
+
+The detail page displays:
+
+- operation name;
+- operation ID;
+- operation category;
+- completed or pending status;
+- additional description, when available.
+
+The `description` field was added to the sample operations in `db.json` to provide more information on the detail page than on the list card.
+
+The detail page includes a link back to the operations list.
+
+### Handling invalid IDs
+
+If an operation ID does not exist, such as `/operatiuni/999`, the API returns an error.
+
+The detail page handles this case by displaying an error message instead of an empty or broken screen.
+
+A link back to the operations page is also provided.
+
+Loading and error states are handled with React state and `useEffect`.
+
+The effect depends on the operation ID, allowing the correct operation to be loaded when the URL parameter changes.
+
+### Custom 404 page
+
+The `NotFoundPage` component handles unknown addresses.
+
+For example:
+
+`http://localhost:5173/ceva`
+
+The route `*` in `App.jsx` matches addresses that do not correspond to an existing page.
+
+The user sees a custom 404 message and a link back to the main page.
+
+### CSS Modules
+
+The application's styling was reorganized using CSS Modules.
+
+Component-specific styles are stored in `.module.css` files next to the components or pages they style.
+
+This avoids CSS class name conflicts and makes the project easier to maintain.
+
+The new style organization includes:
+
+| File | Purpose |
+|---|---|
+| `src/index.css` | Global color variables, body styles and shared classes |
+| `src/components/Layout.module.css` | Header, navigation, shared layout and footer |
+| `src/components/OperatiuneCard.module.css` | Individual operation cards |
+| `src/components/OperatiuniList.module.css` | Operations list and empty state |
+| `src/components/OperatiuneForm.module.css` | Controlled operation form |
+| `src/pages/OperatiuniPage.module.css` | Main dashboard and statistics |
+| `src/pages/OperatiuneDetaliuPage.module.css` | Operation detail page |
+| `src/pages/PaginaInfo.module.css` | About and 404 pages |
+
+Styles are imported as JavaScript objects.
+
+For example:
+
+```jsx
+import styles from "./Layout.module.css";
+```
+
+The corresponding CSS class is used with:
+
+```jsx
+<div className={styles.shell}>
+```
+
+CSS Modules generate locally scoped class names, preventing conflicts between components.
+
+The original orange and graphite visual identity and the light/dark theme were retained.
+
+### Constants
+
+A shared file was introduced:
+
+`frontend/src/constants.js`
+
+It centralizes the allowed operation types and their display labels.
+
+The values are reused by the operation form, operation cards and detail page.
+
+### Automatic verification
+
+The `tw.json` file remains in the repository root.
+
+The application retains the `data-testid` attributes from Stage 7.
+
+Stage 8 adds the following test identifiers:
+
+| data-testid | Purpose |
+|---|---|
+| `nav` | Navigation links in the shared layout |
+| `item-link` | Link from an operation card to its detail page |
+| `detail` | Loaded operation detail section |
+| `detail-title` | Title of the operation on its detail page |
+| `loading` | Loading message |
+| `error` | Error message |
+| `not-found` | Custom 404 page |
+
+The card title now uses `item-link` instead of the previous `item-title` identifier.
+
+The detail route is based on the resource declared in `tw.json`: `/operatiuni/:id`.
+
+### Testing
+
+The following checks are required:
+
+1. Start the API with `npm run api`.
+2. Start the React application with `npm run dev`.
+3. Open the operations dashboard at `/`.
+4. Click the Operations and About navigation links.
+5. Verify that navigation works without a full page reload.
+6. Click an operation title to open its detail page.
+7. Refresh the browser while on `/operatiuni/1`.
+8. Verify that `/operatiuni/999` displays an error message.
+9. Verify that `/ceva` displays the custom 404 page.
+10. Test the browser Back and Forward buttons.
+11. Check the `data-testid` attributes.
+12. Verify that creating, updating and deleting operations still work.
+13. Verify that the light/dark theme works.
+14. Run `npm run lint` and `npm run build`.
+
+The Stage 7 functionality must remain intact after the routing and CSS Modules refactoring.
+
 ## Status
 
 - [x] Stage 1: static mockup
@@ -314,7 +538,8 @@ To test Stage 7:
 - [x] Stage 5: local state and events
 - [x] Stage 6: loading data from a mock API
 - [x] Stage 7: form and validation
-- [ ] Stage 8: routing and component styling
+- [x] Stage 8: routing and detail page implementation
+- [ ] Stage 9: own backend with Express
 
 ## Stage 1 checklist
 
@@ -390,7 +615,6 @@ To test Stage 7:
 | S6-R6 | README Stage 6 section and AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/README.md#L159), [ai-log/etapa-06.md](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/ai-log/etapa-06.md) | Read the documentation |
 | S6-R7 | Stage 6 commit pushed | [Stage 6 commit](https://github.com/davidionut21/mentenanta-auto/commit/30a3c2359aae9daf47caab057fdae18ad987e7a0) | Check GitHub commit history |
 
-
 ## Stage 7 checklist
 
 | ID | Requirement | Where | How to check |
@@ -403,4 +627,3 @@ To test Stage 7:
 | S7-R6 | tw.json and required data-testid attributes | [tw.json](https://github.com/davidionut21/mentenanta-auto/blob/171d4cb/tw.json), [OperatiuneCard.jsx](https://github.com/davidionut21/mentenanta-auto/blob/171d4cb/frontend/src/components/OperatiuneCard.jsx), [OperatiuniList.jsx](https://github.com/davidionut21/mentenanta-auto/blob/171d4cb/frontend/src/components/OperatiuniList.jsx) | Inspect the configuration and test attributes |
 | S7-R7 | README Stage 7 section and AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/171d4cb/README.md), [ai-log/etapa-07.md](https://github.com/davidionut21/mentenanta-auto/blob/171d4cb/ai-log/etapa-07.md) | Read the Stage 7 documentation |
 | S7-R8 | Stage 7 implementation commit pushed | [Stage 7 commit](https://github.com/davidionut21/mentenanta-auto/commit/171d4cbe97911a885cf502b826c19f6c9e0c8bc4) | Check GitHub commit history |
-

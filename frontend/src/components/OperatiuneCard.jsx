@@ -1,15 +1,7 @@
 
-const ETICHETE_TIP = {
-    maintenance: "Mentenanță",
-    repair: "Reparație",
-    inspection: "Inspecție"
-};
-
-const CODURI_TIP = {
-    maintenance: "MNT",
-    repair: "REP",
-    inspection: "INS"
-};
+import { Link } from "react-router-dom";
+import { CODURI_TIP, ETICHETE_TIP } from "../constants.js";
+import styles from "./OperatiuneCard.module.css";
 
 export default function OperatiuneCard({
     operatiune,
@@ -18,15 +10,11 @@ export default function OperatiuneCard({
 }) {
     return (
         <li
+            className={`${styles.card} ${operatiune.completed ? styles.done : ""}`}
             data-testid="item"
             data-id={operatiune.id}
-            className={
-                operatiune.completed
-                    ? "operation-card done"
-                    : "operation-card"
-            }
         >
-            <div className="operation-code">
+            <div className={styles.code}>
                 <span>{CODURI_TIP[operatiune.type]}</span>
 
                 <strong>
@@ -34,48 +22,52 @@ export default function OperatiuneCard({
                 </strong>
             </div>
 
-            <div className="operation-content">
-                <label className="operation-main-toggle">
+            <div className={styles.content}>
+                <div className={styles.main}>
                     <input
                         type="checkbox"
-                        data-testid="item-toggle"
                         checked={operatiune.completed}
                         onChange={() => onToggle(operatiune.id)}
+                        aria-label={`Marchează ${operatiune.operation}`}
+                        data-testid="item-toggle"
                     />
 
-                    <div className="operation-main">
-                        <h3 data-testid="item-title">
+                    <div>
+                        <Link
+                            to={`/operatiuni/${operatiune.id}`}
+                            className={styles.title}
+                            data-testid="item-link"
+                        >
                             {operatiune.operation}
-                        </h3>
+                        </Link>
 
                         <span
-                            className={`type-badge type-badge-${operatiune.type}`}
+                            className={`${styles.badge} ${styles[operatiune.type]}`}
                         >
                             {ETICHETE_TIP[operatiune.type]}
                         </span>
                     </div>
-                </label>
+                </div>
 
-                <div className="operation-actions">
-                    <div
-                        className={
+                <div className={styles.actions}>
+                    <span
+                        className={`${styles.status} ${
                             operatiune.completed
-                                ? "operation-status operation-status-done"
-                                : "operation-status operation-status-pending"
-                        }
+                                ? styles.completed
+                                : styles.pending
+                        }`}
                     >
-                        <span></span>
-
+                        <i />
                         {operatiune.completed
                             ? "Efectuat"
                             : "În așteptare"}
-                    </div>
+                    </span>
 
                     <button
-                        className="delete-button"
-                        data-testid="item-delete"
+                        className={styles.deleteButton}
                         onClick={() => onDelete(operatiune.id)}
                         aria-label={`Șterge ${operatiune.operation}`}
+                        data-testid="item-delete"
                     >
                         Șterge
                     </button>

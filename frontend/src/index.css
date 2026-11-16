@@ -1,0 +1,95 @@
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --page-bg: #ece9e3;
+    --page-bg-2: #f5f2ed;
+    --surface: #fff;
+    --surface-soft: #f7f5f1;
+    --text: #181a1c;
+    --text-secondary: #64676b;
+    --muted: #92969a;
+    --graphite: #111315;
+    --accent: #ff7a00;
+    --accent-hover: #e86e00;
+    --accent-soft: #fff0df;
+    --green: #24905b;
+    --green-soft: #e6f5ed;
+    --red: #cf3f45;
+    --red-soft: #fae9ea;
+    --yellow: #d88d13;
+    --yellow-soft: #fff3dc;
+    --blue: #3479b9;
+    --blue-soft: #e7f1fa;
+    --border: #dcd9d3;
+    --border-dark: #c8c5bf;
+    --shadow-small: 0 4px 12px rgba(20, 22, 24, .06);
+    --shadow: 0 18px 50px rgba(20, 22, 24, .12);
+}
+
+:root[data-theme="dark"] {
+    --page-bg: #090a0b;
+    --page-bg-2: #111315;
+    --surface: #16181a;
+    --surface-soft: #1c1f21;
+    --text: #eeeeec;
+    --text-secondary: #b2b4b5;
+    --muted: #a1a5a8;
+    --border: #303336;
+    --border-dark: #42464a;
+    --accent-soft: #3b2615;
+    --green-soft: #163024;
+    --red-soft: #351d20;
+    --yellow-soft: #382b17;
+    --blue-soft: #192b39;
+    --shadow: 0 18px 55px rgba(0, 0, 0, .35);
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--text);
+    line-height: 1.5;
+    background:
+        repeating-linear-gradient(
+            135deg,
+            rgba(17, 19, 21, .018) 0 1px,
+            transparent 1px 14px
+        ),
+        linear-gradient(180deg, var(--page-bg-2), var(--page-bg));
+}
+
+:focus-visible {
+    outline: 3px solid rgba(255, 122, 0, .4);
+    outline-offset: 3px;
+}
+
+a {
+    color: var(--accent);
+}
+
+.info,
+.error {
+    margin: 14px 0;
+    padding: 13px 15px;
+    border-radius: 8px;
+}
+
+.info {
+    background: var(--surface-soft);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+.error {
+    background: var(--red-soft);
+    color: var(--red);
+    border: 1px solid var(--red);
+}

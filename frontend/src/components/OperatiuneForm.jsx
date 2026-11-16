@@ -1,12 +1,7 @@
 
 import { useState } from "react";
-import "./OperatiuneForm.css";
-
-const TIPURI = [
-    { value: "maintenance", label: "Mentenanță" },
-    { value: "repair", label: "Reparație" },
-    { value: "inspection", label: "Inspecție" }
-];
+import { TIPURI } from "../constants.js";
+import styles from "./OperatiuneForm.module.css";
 
 export default function OperatiuneForm({ onAdd }) {
     const [operation, setOperation] = useState("");
@@ -17,9 +12,7 @@ export default function OperatiuneForm({ onAdd }) {
     function valideaza() {
         const nume = operation.trim();
 
-        if (!nume) {
-            return "Numele operațiunii este obligatoriu.";
-        }
+        if (!nume) return "Numele operațiunii este obligatoriu.";
 
         if (nume.length > 100) {
             return "Numele poate avea maximum 100 de caractere.";
@@ -64,7 +57,7 @@ export default function OperatiuneForm({ onAdd }) {
 
     return (
         <form
-            className="operation-form"
+            className={styles.form}
             onSubmit={handleSubmit}
             noValidate
             data-testid="form"
@@ -104,7 +97,7 @@ export default function OperatiuneForm({ onAdd }) {
             )}
 
             <button
-                className="operation-form-submit"
+                className={styles.submit}
                 type="submit"
                 disabled={trimite}
                 data-testid="form-submit"

@@ -1,0 +1,58 @@
+
+.detail {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: .85rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back:hover {
+    text-decoration: underline;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: .68rem;
+    font-weight: 900;
+    letter-spacing: .15em;
+}
+
+.detail h2 {
+    margin: 8px 0 24px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.done {
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.fields {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 12px 22px;
+    margin: 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.fields dt {
+    font-weight: 800;
+    color: var(--text-secondary);
+}
+
+.fields dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}

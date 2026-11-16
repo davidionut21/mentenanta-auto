@@ -27,6 +27,10 @@ export async function fetchOperatiuni() {
     return data;
 }
 
+export function fetchOperatiune(id) {
+    return request(`/operatiuni/${encodeURIComponent(id)}`);
+}
+
 export function createOperatiune(operatiune) {
     return request("/operatiuni", {
         method: "POST",
