@@ -1,0 +1,9 @@
+
+{
+  "resource": "operatiuni",
+  "title": "operation",
+  "done": "completed",
+  "sample": {
+    "type": "repair"
+  }
+}

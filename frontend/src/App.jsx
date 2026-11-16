@@ -1,7 +1,13 @@
 
 import { useEffect, useState } from "react";
+import OperatiuneForm from "./components/OperatiuneForm.jsx";
 import OperatiuniList from "./components/OperatiuniList.jsx";
-import { fetchOperatiuni } from "./api.js";
+import {
+    createOperatiune,
+    deleteOperatiune,
+    fetchOperatiuni,
+    updateOperatiune
+} from "./api.js";
 import "./api-states.css";
 
 function temaInitiala() {
@@ -22,6 +28,7 @@ export default function App() {
         async function load() {
             try {
                 const data = await fetchOperatiuni();
+
                 if (!ignore) setOperatiuni(data);
             } catch (err) {
                 if (!ignore) setError(err.message);
@@ -37,30 +44,48 @@ export default function App() {
         };
     }, []);
 
-    function handleToggle(id) {
-        setOperatiuni((prev) =>
-            prev.map((operatiune) =>
-                operatiune.id === id
-                    ? {
-                          ...operatiune,
-                          completed: !operatiune.completed
-                      }
-                    : operatiune
-            )
-        );
+    async function handleAdd(operatiune) {
+        const creata = await createOperatiune(operatiune);
+        setOperatiuni((prev) => [...prev, creata]);
     }
 
-    function handleDelete(id) {
-        setOperatiuni((prev) =>
-            prev.filter((operatiune) => operatiune.id !== id)
-        );
+    async function handleToggle(id) {
+        const operatiune = operatiuni.find((o) => o.id === id);
+        if (!operatiune) return;
+
+        try {
+            const actualizata = await updateOperatiune(id, {
+                completed: !operatiune.completed
+            });
+
+            setOperatiuni((prev) =>
+                prev.map((o) => o.id === id ? actualizata : o)
+            );
+
+            setError(null);
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
+    async function handleDelete(id) {
+        try {
+            await deleteOperatiune(id);
+
+            setOperatiuni((prev) =>
+                prev.filter((o) => o.id !== id)
+            );
+
+            setError(null);
+        } catch (err) {
+            setError(err.message);
+        }
     }
 
     function handleTema() {
         const temaNoua = tema === "dark" ? "light" : "dark";
 
         setTema(temaNoua);
-
         document.documentElement.dataset.theme = temaNoua;
     }
 
@@ -192,9 +217,7 @@ export default function App() {
                                     SERVICE HISTORY
                                 </p>
 
-                                <h2>
-                                    Operațiuni
-                                </h2>
+                                <h2>Operațiuni</h2>
                             </div>
 
                             <span className="operation-count">
@@ -202,21 +225,23 @@ export default function App() {
                             </span>
                         </div>
 
+                        <OperatiuneForm onAdd={handleAdd} />
+
                         {loading && (
-                            <p className="info" role="status">
+                            <p className="info" data-testid="loading">
                                 Se încarcă operațiunile...
                             </p>
                         )}
 
                         {error && (
-                            <p className="error" role="alert">
-                                Nu am putut încărca datele: {error}.{" "}
-                                Verifică dacă API-ul este pornit cu{" "}
+                            <p className="error" data-testid="error">
+                                Nu am putut finaliza cererea: {error}.
+                                Verifică dacă API-ul rulează cu{" "}
                                 <code>npm run api</code>.
                             </p>
                         )}
 
-                        {!loading && !error && (
+                        {!loading && (
                             <OperatiuniList
                                 operatiuni={operatiuni}
                                 onToggle={handleToggle}
@@ -232,29 +257,21 @@ export default function App() {
                                     VEHICLE STATUS
                                 </p>
 
-                                <h2>
-                                    Prezentare generală
-                                </h2>
+                                <h2>Prezentare generală</h2>
                             </div>
                         </div>
 
                         <div className="progress-card">
                             <div className="progress-top">
-                                <span>
-                                    Progres mentenanță
-                                </span>
+                                <span>Progres mentenanță</span>
 
-                                <strong>
-                                    {progres}%
-                                </strong>
+                                <strong>{progres}%</strong>
                             </div>
 
                             <div className="progress-track">
                                 <div
                                     className="progress-fill"
-                                    style={{
-                                        width: `${progres}%`
-                                    }}
+                                    style={{ width: `${progres}%` }}
                                 ></div>
                             </div>
 
@@ -270,9 +287,7 @@ export default function App() {
                                     Mentenanță
                                 </div>
 
-                                <strong>
-                                    {mentenanta}
-                                </strong>
+                                <strong>{mentenanta}</strong>
                             </div>
 
                             <div className="overview-row">
@@ -281,9 +296,7 @@ export default function App() {
                                     Reparații
                                 </div>
 
-                                <strong>
-                                    {reparatii}
-                                </strong>
+                                <strong>{reparatii}</strong>
                             </div>
 
                             <div className="overview-row">
@@ -292,9 +305,7 @@ export default function App() {
                                     Inspecții
                                 </div>
 
-                                <strong>
-                                    {inspectii}
-                                </strong>
+                                <strong>{inspectii}</strong>
                             </div>
                         </div>
 
@@ -303,9 +314,7 @@ export default function App() {
                                 STATUS VEHICUL
                             </span>
 
-                            <strong>
-                                Monitorizat
-                            </strong>
+                            <strong>Monitorizat</strong>
 
                             <p>
                                 Toate operațiunile sunt urmărite în sistem.

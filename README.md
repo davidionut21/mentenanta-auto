@@ -49,9 +49,10 @@ npm run dev
 
 Open the Vite address, usually `http://localhost:5173/`.
 
-To verify the build:
+To verify the project:
 
 ```bash
+npm run lint
 npm run build
 ```
 
@@ -59,7 +60,7 @@ npm run build
 
 | Tool | Used for |
 |---|---|
-| ChatGPT | Project theme definition, README structure, implementation guidance through Stage 6, the API integration and automotive dashboard styling |
+| ChatGPT | Project theme definition, README structure, implementation guidance through Stage 7, API integration, controlled forms, validation, persistent CRUD operations and automotive dashboard styling |
 
 Details per stage: see the `ai-log/` folder.
 
@@ -159,32 +160,150 @@ The operation list and selected theme return to their initial values after refre
 ## Stage 6: data from a mock API
 
 The maintenance operations are stored in `frontend/db.json`, under the resource name `operatiuni`.
+
 The mock REST API is provided by `json-server@0.17.4` at `http://localhost:3001/operatiuni`.
+
 The first three records from Stage 5 are preserved and two new maintenance examples were added.
 
-`frontend/src/api.js` is the only module that makes an HTTP request. Its `fetchOperatiuni`
-function uses `fetch`, `async` / `await`, checks `res.ok`, and reads the API base URL from
-`VITE_API_URL`, defaulting to `http://localhost:3001`. The variable is documented in
-`frontend/.env.example`.
+`frontend/src/api.js` is the only module that makes an HTTP request. Its `fetchOperatiuni` function uses `fetch`, `async` / `await`, checks `res.ok`, and reads the API base URL from `VITE_API_URL`, defaulting to `http://localhost:3001`.
 
-When `App` mounts, `useEffect` fetches the operations. The initial list is empty and
-three UI states are handled: loading, success, and a descriptive error if the API is unavailable.
+The variable is documented in `frontend/.env.example`.
+
+When `App` mounts, `useEffect` fetches the operations. The initial list is empty and three UI states are handled: loading, success, and a descriptive error if the API is unavailable.
+
 The effect is cleaned up with `ignore`, so an outdated response does not update an unmounted component.
 
-To test the failure case, stop `npm run api` and refresh the page. To test a visible
-loading state, stop the normal API and temporarily run in `frontend/`:
+To test the failure case, stop `npm run api` and refresh the page.
+
+To test a visible loading state, stop the normal API and temporarily run in `frontend/`:
 
 ```bash
 npx json-server --watch db.json --port 3001 --delay 4000
 ```
 
 The existing dashboard and `OperatiuneCard` / `OperatiuniList` components remain unchanged.
-A small `api-states.css` stylesheet adds only loading/error styles, without replacing the
-custom `App.css` from Stage 5.
 
-**Stage 6 limitation:** checking or deleting an operation still changes only React state.
-Refreshing the browser restores the values from `db.json`; saving changes on the server
-is reserved for Stage 7.
+A small `api-states.css` stylesheet adds only loading/error styles, without replacing the custom `App.css` from Stage 5.
+
+**Stage 6 limitation:** Checking or deleting an operation only changes React state. Refreshing the browser restores the values from `db.json`. Saving changes on the server is implemented in Stage 7.
+
+## Stage 7: form and validation
+
+The application now supports persistent CRUD operations through the mock REST API.
+
+A controlled React form was added in `frontend/src/components/OperatiuneForm.jsx`.
+
+The form allows the user to create maintenance operations directly from the interface, without manually editing `db.json`.
+
+### Controlled form
+
+The form contains two controlled fields:
+
+- `operation`: required text, maximum 100 characters;
+- `type`: a select field with Maintenance, Repair and Inspection.
+
+The `completed` field is automatically set to `false` for new operations.
+
+Each input uses React state through `useState`, with `value` and `onChange`.
+
+### Validation
+
+Before submitting data, the form checks that:
+
+- the operation name is not empty;
+- the name contains no more than 100 characters;
+- the selected type is valid.
+
+The `trim()` method removes unnecessary spaces from the operation name.
+
+Invalid data is rejected before sending an HTTP request.
+
+Validation errors are displayed directly beside the form, without using browser alerts.
+
+The form uses `event.preventDefault()` to prevent the page from reloading on submission.
+
+### Saving operations
+
+All HTTP requests are centralized in `frontend/src/api.js`.
+
+A common `request()` function handles JSON headers, HTTP options and response validation.
+
+The API supports the following operations:
+
+| Operation | HTTP method | Endpoint |
+|---|---|---|
+| Read operations | GET | `/operatiuni` |
+| Create operation | POST | `/operatiuni` |
+| Update operation | PATCH | `/operatiuni/:id` |
+| Delete operation | DELETE | `/operatiuni/:id` |
+
+The `request()` function checks `res.ok` and handles HTTP 204 responses without attempting to parse an empty JSON body.
+
+### Updating React state
+
+The interface is updated only after the server confirms the request.
+
+When adding an operation, the server returns the saved object with its generated ID. This object is added to the React state.
+
+When changing the completed status, the application sends a PATCH request containing the updated field.
+
+When deleting an operation, the application sends a DELETE request and removes the item from React state only after the server confirms the deletion.
+
+The dashboard counters and progress indicator are automatically recalculated from the updated state.
+
+### Form submission behavior
+
+The submit button is disabled while the request is in progress to prevent duplicate submissions.
+
+The form is cleared only after successful saving.
+
+If the API request fails, an error message is displayed and the values entered by the user are preserved.
+
+### Data persistence
+
+Unlike Stage 6, all successful changes are saved on the server.
+
+Operations added, completed or deleted through the interface remain changed after refreshing the browser.
+
+The application still uses json-server as its temporary backend. A custom backend will be introduced in a later stage.
+
+### Automatic verification
+
+The file `tw.json` was added in the repository root.
+
+It defines the application's resource and field names:
+
+- resource: `operatiuni`;
+- title: `operation`;
+- done: `completed`;
+- sample type: `repair`.
+
+The form, cards, buttons and status messages contain `data-testid` attributes required for automated evaluation.
+
+These attributes do not change the appearance or behavior of the application.
+
+### Styling
+
+The existing automotive dashboard design was preserved.
+
+The form uses a separate stylesheet, `OperatiuneForm.css`.
+
+The orange and graphite color scheme, statistics, progress indicator and light/dark theme remain available.
+
+### Testing
+
+To test Stage 7:
+
+1. Start the mock API using `npm run api`.
+2. Start the React application using `npm run dev`.
+3. Submit the form with an empty operation name and verify the validation error.
+4. Add a valid operation and verify that it appears in the list.
+5. Refresh the browser and check that the new operation is still present.
+6. Toggle an operation and refresh to verify persistence.
+7. Delete an operation and refresh to verify persistence.
+8. Stop the API and submit a new operation to verify error handling.
+9. Verify that the entered text is preserved when saving fails.
+10. Run `npm run lint` and `npm run build`.
 
 ## Status
 
@@ -194,7 +313,8 @@ is reserved for Stage 7.
 - [x] Stage 4: components rendered from data
 - [x] Stage 5: local state and events
 - [x] Stage 6: loading data from a mock API
-- [ ] Stage 7: form and validation
+- [x] Stage 7: form and validation
+- [ ] Stage 8: routing and component styling
 
 ## Stage 1 checklist
 
@@ -269,3 +389,16 @@ is reserved for Stage 7.
 | S6-R5 | Fetch only in api.js, API URL from environment | [api.js](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/src/api.js#L3-L19), [.env.example](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/frontend/.env.example#L2-L3) | Check `fetch`, `res.ok`, `VITE_API_URL` and the useEffect cleanup |
 | S6-R6 | README Stage 6 section and AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/README.md#L159), [ai-log/etapa-06.md](https://github.com/davidionut21/mentenanta-auto/blob/30a3c23/ai-log/etapa-06.md) | Read the documentation |
 | S6-R7 | Stage 6 commit pushed | [Stage 6 commit](https://github.com/davidionut21/mentenanta-auto/commit/30a3c2359aae9daf47caab057fdae18ad987e7a0) | Check GitHub commit history |
+
+## Stage 7 checklist
+
+| ID | Requirement | Where | How to check |
+|---|---|---|---|
+| S7-R1 | Controlled form: value and onChange on every field | [OperatiuneForm.jsx](https://github.com/davidionut21/mentenanta-auto/blob/main/frontend/src/components/OperatiuneForm.jsx) | Check the input and select fields |
+| S7-R2 | Empty operation name shows an error and no HTTP request is sent | [OperatiuneForm.jsx](https://github.com/davidionut21/mentenanta-auto/blob/main/frontend/src/components/OperatiuneForm.jsx) | Submit an empty form and inspect Network |
+| S7-R3 | Created operation appears in the list and survives refresh | [App.jsx](https://github.com/davidionut21/mentenanta-auto/blob/main/frontend/src/App.jsx), [api.js](https://github.com/davidionut21/mentenanta-auto/blob/main/frontend/src/api.js) | Add a valid operation and refresh the browser |
+| S7-R4 | Toggle and delete changes survive refresh | [App.jsx](https://github.com/davidionut21/mentenanta-auto/blob/main/frontend/src/App.jsx), [api.js](https://github.com/davidionut21/mentenanta-auto/blob/main/frontend/src/api.js) | Toggle or delete an operation and refresh |
+| S7-R5 | Submit button disabled while saving; form cleared only on success | [OperatiuneForm.jsx](https://github.com/davidionut21/mentenanta-auto/blob/main/frontend/src/components/OperatiuneForm.jsx) | Use `--delay 3000`, then test with the API stopped |
+| S7-R6 | tw.json and required data-testid attributes | [tw.json](https://github.com/davidionut21/mentenanta-auto/blob/main/tw.json), [OperatiuneCard.jsx](https://github.com/davidionut21/mentenanta-auto/blob/main/frontend/src/components/OperatiuneCard.jsx), [OperatiuniList.jsx](https://github.com/davidionut21/mentenanta-auto/blob/main/frontend/src/components/OperatiuniList.jsx) | Inspect the test attributes and the configuration |
+| S7-R7 | README Stage 7 section and AI log | [README.md](https://github.com/davidionut21/mentenanta-auto/blob/main/README.md), [ai-log/etapa-07.md](https://github.com/davidionut21/mentenanta-auto/blob/main/ai-log/etapa-07.md) | Read the documentation |
+| S7-R8 | Stage 7 implementation commit pushed | [GitHub commit history](https://github.com/davidionut21/mentenanta-auto/commits/main/) | Verify the Stage 7 commit in the history |

@@ -1,3 +1,4 @@
+
 const ETICHETE_TIP = {
     maintenance: "Mentenanță",
     repair: "Reparație",
@@ -17,6 +18,8 @@ export default function OperatiuneCard({
 }) {
     return (
         <li
+            data-testid="item"
+            data-id={operatiune.id}
             className={
                 operatiune.completed
                     ? "operation-card done"
@@ -24,9 +27,7 @@ export default function OperatiuneCard({
             }
         >
             <div className="operation-code">
-                <span>
-                    {CODURI_TIP[operatiune.type]}
-                </span>
+                <span>{CODURI_TIP[operatiune.type]}</span>
 
                 <strong>
                     #{String(operatiune.id).padStart(3, "0")}
@@ -37,12 +38,13 @@ export default function OperatiuneCard({
                 <label className="operation-main-toggle">
                     <input
                         type="checkbox"
+                        data-testid="item-toggle"
                         checked={operatiune.completed}
                         onChange={() => onToggle(operatiune.id)}
                     />
 
                     <div className="operation-main">
-                        <h3>
+                        <h3 data-testid="item-title">
                             {operatiune.operation}
                         </h3>
 
@@ -71,6 +73,7 @@ export default function OperatiuneCard({
 
                     <button
                         className="delete-button"
+                        data-testid="item-delete"
                         onClick={() => onDelete(operatiune.id)}
                         aria-label={`Șterge ${operatiune.operation}`}
                     >

@@ -1,3 +1,4 @@
+
 import OperatiuneCard from "./OperatiuneCard.jsx";
 
 export default function OperatiuniList({
@@ -7,14 +8,10 @@ export default function OperatiuniList({
 }) {
     if (operatiuni.length === 0) {
         return (
-            <div className="empty-state">
-                <div className="empty-symbol">
-                    0
-                </div>
+            <div className="empty-state" data-testid="empty">
+                <div className="empty-symbol">0</div>
 
-                <h3>
-                    Nu există operațiuni
-                </h3>
+                <h3>Nu există operațiuni</h3>
 
                 <p>
                     Lista operațiunilor de mentenanță este momentan goală.
