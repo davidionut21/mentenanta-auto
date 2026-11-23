@@ -1,5 +1,6 @@
 
-export const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
+export const API_URL =
+    import.meta.env.VITE_API_URL ?? "http://localhost:3001";
 
 async function request(path, options = {}) {
     const res = await fetch(`${API_URL}${path}`, {
@@ -11,7 +12,11 @@ async function request(path, options = {}) {
     });
 
     if (!res.ok) {
-        throw new Error(`Eroare server: ${res.status}`);
+        const body = await res.json().catch(() => ({}));
+
+        throw new Error(
+            body.error || `Eroare server: ${res.status}`
+        );
     }
 
     return res.status === 204 ? null : res.json();
@@ -21,14 +26,18 @@ export async function fetchOperatiuni() {
     const data = await request("/operatiuni");
 
     if (!Array.isArray(data)) {
-        throw new Error("Răspunsul API-ului nu este o listă de operațiuni.");
+        throw new Error(
+            "Răspunsul API-ului nu este o listă de operațiuni."
+        );
     }
 
     return data;
 }
 
 export function fetchOperatiune(id) {
-    return request(`/operatiuni/${encodeURIComponent(id)}`);
+    return request(
+        `/operatiuni/${encodeURIComponent(id)}`
+    );
 }
 
 export function createOperatiune(operatiune) {
